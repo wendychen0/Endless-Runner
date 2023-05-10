@@ -7,9 +7,11 @@ class Play extends Phaser.Scene {
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('spaceship2', './assets/spaceship2.png');
-        //this.load.image('starfield', './assets/starfield.png');
-        this.load.image('space', './assets/space.png');
+        //this.load.image('space', './assets/space.png');
 
+        this.load.image('mat', './assets/picnicmat.png');
+
+        this.load.image('avatar1', './assets/avatar1sm.png');
         this.load.image('cake', './assets/cake.png');
         this.load.image('cookie', './assets/cookie.png');
         this.load.image('sandwhich', './assets/sandwhich.png');
@@ -25,7 +27,7 @@ class Play extends Phaser.Scene {
     create() {
       // place tile sprite
       //this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
-      this.space = this.add.tileSprite(0, 0, 640, 480, 'space').setOrigin(0, 0);
+      this.space = this.add.tileSprite(0, 0, 680, 650, 'mat').setOrigin(0, 0);
 
       let sfx = this.sound.add('music', {volume: 0.2});
       sfx.loop = true;
@@ -41,14 +43,19 @@ class Play extends Phaser.Scene {
       //this.scene.start("playScene");
 
       // add rocket (p1)
-      this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
+      this.p1Rocket = new Rocket(this, 5 + borderPadding, game.config.height - borderUISize * 2 - borderPadding, 'avatar1').setOrigin(0, 0);
+      this.p1Rocket.setScale(0.8);
 
       // add spaceships (x4)
       this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'cake', 0, 30).setOrigin(0, 0);
+      this.ship01.setScale(0.5);
       this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'cookie', 0, 20).setOrigin(0,0);
+      this.ship02.setScale(0.5);
       this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'bug', 0, 10).setOrigin(0,0);
+      this.ship03.setScale(0.5);
 
       this.ship04 = new Spaceship(this, game.config.width + borderUISize*6 + 45, borderUISize*4 - 35, 'sandwhich', 0, 40).setOrigin(0,0);
+      this.ship04.setScale(0.5);
       this.ship04.moveSpeed = 3.3;
 
       // define keys

@@ -14,7 +14,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
     update() {
         // left/right movement
         if(!this.isFiring) {
-            this.x = cursorx;
+            this.y = cursory;
             /*if(keyLEFT.isDown && this.x >= borderUISize + this.width) {
                 this.x -= this.moveSpeed;
             } else if (keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width) {
@@ -22,27 +22,35 @@ class Rocket extends Phaser.GameObjects.Sprite {
             }*/
         }
         // fire button
-        if((mousedown || Phaser.Input.Keyboard.JustDown(keyF)) && !this.isFiring) {
+        if((Phaser.Input.Keyboard.JustDown(keyF)) && !this.isFiring) {
         //if(mousedown && !this.isFiring) {
             this.isFiring = true;
             this.sfxRocket.play();  // play sfx
         }
         // if fired, move up
-        if(this.isFiring && this.y >= borderUISize * 3 + borderPadding) {
+        if(this.isFiring && this.x >= borderUISize * 3 + borderPadding) {
+            this.x -= this.moveSpeed * .9;
+            if(keyDOWN.isDown && this.y >= borderUISize + this.width) {
+                this.y -= this.moveSpeed;
+            } else if (keyUP.isDown && this.y <= game.config.width - borderUISize - this.width) {
+                this.y += this.moveSpeed;
+            }
+        }
+        /*if(this.isFiring && this.y >= borderUISize * 3 + borderPadding) {
             this.y -= this.moveSpeed * .9;
             if(keyLEFT.isDown && this.x >= borderUISize + this.width) {
                 this.x -= this.moveSpeed;
             } else if (keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width) {
                 this.x += this.moveSpeed;
             }
-        }
+        }*/
         // reset on miss
-        if(this.y <= borderUISize * 3 + borderPadding) {
+        if(this.x <= borderUISize * 3 + borderPadding) {
             this.reset();
         }
     }
     reset() {
         this.isFiring = false;
-        this.y = game.config.height - borderUISize - borderPadding;
+        this.x = 0 + borderPadding;//game.config.height - borderUISize - borderPadding;
     }
 }

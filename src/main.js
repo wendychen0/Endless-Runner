@@ -6,15 +6,18 @@
 
 let config = {
     type: Phaser.AUTO,
-    width: 640,
-    height: 480,
+    width: 680,
+    height: 650,
+    scale: {
+      autoCenter: Phaser.Scale.CENTER_BOTH
+    },
     scene: [ Menu, Play ]
   }
 
 let game = new Phaser.Game(config);
 
 // reserve keyboard vars
-let keyF, keyR, keyLEFT, keyRIGHT, keySPACE;
+let keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keySPACE, keyT;
 
 // set UI sizes
 let borderUISize = game.config.height / 15;
