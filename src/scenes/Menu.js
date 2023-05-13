@@ -5,9 +5,10 @@ class Menu extends Phaser.Scene {
     preload() {
       this.load.image('title', './assets/gametitle.png');
       this.load.image('start', './assets/start.png');
-      this.load.image('control1', './assets/controls1.png');
-      this.load.image('control2', './assets/controls2.png');
-      this.load.image('t', './assets/t.png');
+      this.load.image('control', './assets/control.png');
+      //this.load.image('control1', './assets/controls1.png');
+      //this.load.image('control2', './assets/controls2.png');
+      this.load.image('instruc', './assets/instruc.png');
 
       this.load.image('cake', './assets/cake.png');
       this.load.image('watermelon', './assets/watermelon.png');
@@ -29,28 +30,26 @@ class Menu extends Phaser.Scene {
       this.title = this.add.sprite(game.config.width/2, 90, 'title');
       this.title.setScale(0.8);
 
-      this.control1 = this.add.image(game.config.width/2, 235, 'control1');
-      this.control1.setScale(0.65);
-      this.control2 = this.add.image(game.config.width/2, 275, 'control2');
-      this.control2.setScale(0.65);
+      this.control = this.add.image(game.config.width/2, 235, 'control');
+      this.control.setScale(0.65);
+      //this.control2 = this.add.image(game.config.width/2, 275, 'control2');
+      //this.control2.setScale(0.65);
 
-      this.start = this.add.image(game.config.width/2, 325, 'start');
+      this.start = this.add.image(game.config.width/2, 305, 'start');
       this.start.setScale(0.65);
 
-      this.tut = this.add.image(game.config.width/2, 455, 't');
-      this.tut.setScale(0.65);
+      this.tut = this.add.image(game.config.width/2, 445, 'instruc');
+      this.tut.setScale(0.52);
 
       this.cake = this.add.image(570, 150, 'cake');
       this.cake.setScale(1.1);
 
-      this.sandwhich = this.add.image(100, 390, 'sandwhich');
+      this.sandwhich = this.add.image(100, 370, 'sandwhich');
       this.sandwhich.setScale(0.5);
 
       this.watermelon = this.add.image(620, 510, 'watermelon');
       this.watermelon.setScale(0.5);
 
-      //this.add.bitmapText(game.config.width/2, game.config.height/2, 'gem', 'High Score:', 64).setOrigin(0.5).setTint(0xff0000);
-      //this.add.bitmapText(game.config.width/2, game.config.height/2, 'gem', 'High Score:', 64).setOrigin(0.5).setTint(0xff00ff).setBlendMode('SCREEN');
       // menu text configuration
       let menuConfig = {
         fontFamily: 'Sigmar',
@@ -67,9 +66,7 @@ class Menu extends Phaser.Scene {
         },
         fixedWidth: 0
       }
-      //this.add.text(20, 20, "Rocket Patrol Menu");
-      //this.scene.start("playScene");
-
+      
       // show menu text
       //this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding - 90, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
       

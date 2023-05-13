@@ -47,13 +47,14 @@ class Play extends Phaser.Scene {
       this.p1Rocket = new Rocket(this, 20 + borderPadding, game.config.height - borderUISize - borderPadding, 'avatar1').setOrigin(0, 0);
       this.p1Rocket.setScale(0.8);
 
-      const bug1 = this.add.image(200,200,'bug').setScale(0.5);
+      const bug1 = this.add.image(100,200,'bug').setScale(0.5);
+      const bug2 = this.add.image(150,300,'bug').setScale(0.5);
       // add spaceships (x4)
       this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4 + 35, 'cake', 0, 30).setOrigin(0, 0);
       this.ship01.setScale(0.7);
       this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2 + 20, 'cookie', 0, 20).setOrigin(0,0);
       this.ship02.setScale(0.5);
-      this.ship03 = new Spaceship(this, game.config.width - 400, borderUISize*6 + borderPadding*4 + 18, 'bug', 0, 10).setOrigin(0,0);
+      this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4 + 18, 'bug', 0, 10).setOrigin(0,0);
       this.ship03.setScale(0.5);
 
       this.ship04 = new Spaceship(this, game.config.width + borderUISize*6 + 45, borderUISize*4 - 45, 'sandwhich', 0, 40).setOrigin(0,0);
@@ -64,7 +65,7 @@ class Play extends Phaser.Scene {
       this.watermelon.setScale(0.5);
 
       this.tweens.add({
-        targets: [ bug1 ],
+        targets: [ bug1, bug2 ],
         x: 600,
         yoyo: true,
         duration: 1500,
