@@ -37,23 +37,23 @@ class Play extends Phaser.Scene {
 
       // add player
       this.avatar = new Player(this, 20 + borderPadding, game.config.height - borderUISize - borderPadding, 'avatar1').setOrigin(0, 0);
-      this.avatar.setScale(0.8);
+      this.avatar.setScale(0.7);
 
       const bug1 = this.add.image(100,200,'bug').setScale(0.5);
       const bug2 = this.add.image(150,300,'bug').setScale(0.5);
       // add foods
-      this.cake = new Food(this, game.config.width + borderUISize*6, borderUISize*4 + 35, 'cake', 0, 10).setOrigin(0, 0);
+      this.cake = new Food(this, game.config.width + borderUISize*6, borderUISize*4 + 35, 'cake', 0, 10, false).setOrigin(0, 0);
       this.cake.setScale(0.7);
-      this.cookie = new Food(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2 + 20, 'cookie', 0, 5).setOrigin(0,0);
+      this.cookie = new Food(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2 + 20, 'cookie', 0, 5, false).setOrigin(0,0);
       this.cookie.setScale(0.5);
-      this.bug = new Food(this, game.config.width, borderUISize*6 + borderPadding*4 + 18, 'bug', 0, -10).setOrigin(0,0);
+      this.bug = new Food(this, game.config.width, borderUISize*6 + borderPadding*4 + 18, 'bug', 0, -10, true).setOrigin(0,0);
       this.bug.setScale(0.5);
 
-      this.sandwhich = new Food(this, game.config.width + borderUISize*6 + 45, borderUISize*4 - 45, 'sandwhich', 0, 10).setOrigin(0,0);
+      this.sandwhich = new Food(this, game.config.width + borderUISize*6 + 45, borderUISize*4 - 45, 'sandwhich', 0, 10, false).setOrigin(0,0);
       this.sandwhich.setScale(0.5);
       this.sandwhich.moveSpeed = 3.3;
 
-      this.watermelon = new Food(this, game.config.width, borderUISize*6 + borderPadding*4 + 65, 'watermelon', 0, 10).setOrigin(0,0);
+      this.watermelon = new Food(this, game.config.width, borderUISize*6 + borderPadding*4 + 65, 'watermelon', 0, 10, false).setOrigin(0,0);
       this.watermelon.setScale(0.5);
 
       this.tweens.add({
@@ -185,7 +185,7 @@ class Play extends Phaser.Scene {
       // check collisions
       if(this.checkCollision(this.avatar, this.bug)) {
         this.avatar.reset();
-        this.hitBug(this.bug);
+        this.collectFood(this.bug);
       }
       if (this.checkCollision(this.avatar, this.cookie)) {
         this.avatar.reset();
@@ -207,9 +207,11 @@ class Play extends Phaser.Scene {
     }
     checkCollision(player, food) {
         // simple AABB checking
-        if (player.x < food.x + food.width && 
+        console.log('food',food.width);
+        console.log('player', player.width);
+        if (player.x < food.x + food.width - 5 && 
           player.x + player.width > food.x && 
-          player.y < food.y + food.height &&
+          player.y < food.y + food.height - 10 &&
           player.height + player.y > food.y) {
             return true;
         } else {
@@ -227,6 +229,9 @@ class Play extends Phaser.Scene {
         this.scoreLeft.text = this.p1Score;  
         let num = Math.floor(Math.random() * 2);
         //console.log(num);
+        if (food.isBug == true) {
+          this.sound.play('hit');
+        }
         if (num == 0) {
           this.sound.play('collect1');
         }
@@ -236,13 +241,6 @@ class Play extends Phaser.Scene {
         // add 1 second to timer when a ship is hit
         this.clock.delay += food.points * 100;
         this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());   
-    }
-    hitBug(bug) {
-      bug.alpha = 0;
-      bug.reset();
-      bug.alpha = 1;
-      this.p1Score += bug.points;
-      this.sound.play('hit');
     }
     clicked(){
       mousedown = true;
