@@ -82,11 +82,13 @@ class Play extends Phaser.Scene {
       // initialize score
       this.p1Score = 0;
 
+      this.lives = 2;
+
       input = this.input;
       input.on('pointerdown', this.clicked, this);
       input.on('pointerup', this.notClicked, this);
 
-      this.reached = true;
+      this.reached = false;
       // display score
       let scoreConfig = {
         fontFamily: 'Courier',
@@ -125,37 +127,35 @@ class Play extends Phaser.Scene {
         fixedWidth: 115
       }
 
-      this.timeLeft = this.add.text(borderUISize + borderPadding + 300, borderUISize + borderPadding*2, this.p1Score, clockConfig);
+      //this.timeLeft = this.add.text(borderUISize + borderPadding + 300, borderUISize + borderPadding*2, this.p1Score, clockConfig);
+      this.livesLeft = this.add.text(borderUISize + borderPadding + 300, borderUISize + borderPadding*2, this.lives, clockConfig);
       this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
       this.highscoreText = this.add.text(borderUISize + borderPadding + 425, borderUISize + borderPadding*2, `HI:${highscore}`, highScConfig);
 
       // GAME OVER flag
       this.gameOver = false;
-      // 60-second play clock
+
       scoreConfig.fixedWidth = 0;
-      this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-          this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-          this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
-          this.gameOver = true;
-      }, null, this);
+      
+      this.difficultyTimer = this.time.addEvent({
+        delay: 10000,
+        callback: this.increaseSpeed,
+        callbackScope: this,
+        loop: true
+    });
 
     }
     update() {
       cursorx = input.x;
-      cursory = input.y;    
-      //const yval = [borderUISize*4 + 35, borderUISize*4 + 50, borderUISize*7 + 15];
-      //let pick = Math.floor(Math.random() * 3);
-      //this.bug.y = yval[pick];
+      cursory = input.y;
 
-      // increase rocket speeds after 30 secs
-      if (Math.trunc(this.clock.elapsed/1000) == 30 && this.reached) {
-        this.cake.moveSpeed += 1.5;
-        this.cookie.moveSpeed += 1.5;
-        this.bug.moveSpeed += 1.5;
-        this.sandwhich.moveSpeed += 1.5;
-        this.watermelon.moveSpeed += 1.5;
-        this.reached = false;
+      // Game over at 0 lives
+      if (this.lives == 0) {
+        this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+        this.gameOver = true;
       }
+      
       // check key input for restart
       if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
         if (this.p1Score > highscore) {
@@ -169,7 +169,8 @@ class Play extends Phaser.Scene {
         }
         this.scene.start("menuScene");
       }
-      this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());
+      //this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());
+      this.livesLeft.text = this.lives;
 
       this.space.tilePositionX -= 4;
 
@@ -227,20 +228,29 @@ class Play extends Phaser.Scene {
         this.p1Score += food.points;
         console.log('score',this.p1Score);
         this.scoreLeft.text = this.p1Score;  
-        let num = Math.floor(Math.random() * 2);
-        //console.log(num);
+        
         if (food.isBug == true) {
           this.sound.play('hit');
+          this.lives -= 1;
+        } else {
+          let num = Math.floor(Math.random() * 2);
+          if (num == 0) {
+            this.sound.play('collect1');
+          }
+          if (num == 1) {
+            this.sound.play('collect2');
+          }
         }
-        if (num == 0) {
-          this.sound.play('collect1');
-        }
-        if (num == 1) {
-          this.sound.play('collect2');
-        }
-        // add 1 second to timer when a ship is hit
+        /*// add 1 second to timer when a food is collected
         this.clock.delay += food.points * 100;
-        this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());   
+        this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());*/   
+    }
+    increaseSpeed() {
+      this.cake.moveSpeed += 1.5;
+      this.cookie.moveSpeed += 1.5;
+      this.bug.moveSpeed += 1.5;
+      this.sandwhich.moveSpeed += 1.5;
+      this.watermelon.moveSpeed += 1.5;
     }
     clicked(){
       mousedown = true;
