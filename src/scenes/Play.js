@@ -4,12 +4,7 @@ class Play extends Phaser.Scene {
     }
     preload() {
         // load images/tile sprites
-        this.load.image('rocket', './assets/rocket.png');
-        this.load.image('spaceship', './assets/spaceship.png');
-        this.load.image('spaceship2', './assets/spaceship2.png');
-
         this.load.image('mat', './assets/picnicmat.png');
-
         this.load.image('avatar1', './assets/avatar1sm.png');
         this.load.image('cake', './assets/cake.png');
         this.load.image('cookie', './assets/cookie.png');
@@ -25,14 +20,11 @@ class Play extends Phaser.Scene {
 
     create() {
       // place tile sprite
-      //this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
       this.space = this.add.tileSprite(0, 0, 680, 650, 'mat').setOrigin(0, 0);
 
       let sfx = this.sound.add('music', {volume: 0.4});
       sfx.loop = true;
       sfx.play();
-
-      //this.hasCake = false;
 
       // green UI background
       this.add.rectangle(0, borderUISize + borderPadding -5, game.config.width, borderUISize * 2, 0xa0d2e8).setOrigin(0, 0);
@@ -43,25 +35,25 @@ class Play extends Phaser.Scene {
       this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
       //this.scene.start("playScene");
 
-      // add rocket (p1)
-      this.p1Rocket = new Rocket(this, 20 + borderPadding, game.config.height - borderUISize - borderPadding, 'avatar1').setOrigin(0, 0);
-      this.p1Rocket.setScale(0.8);
+      // add player
+      this.avatar = new Player(this, 20 + borderPadding, game.config.height - borderUISize - borderPadding, 'avatar1').setOrigin(0, 0);
+      this.avatar.setScale(0.8);
 
       const bug1 = this.add.image(100,200,'bug').setScale(0.5);
       const bug2 = this.add.image(150,300,'bug').setScale(0.5);
-      // add spaceships (x4)
-      this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4 + 35, 'cake', 0, 30).setOrigin(0, 0);
-      this.ship01.setScale(0.7);
-      this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2 + 20, 'cookie', 0, 20).setOrigin(0,0);
-      this.ship02.setScale(0.5);
-      this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4 + 18, 'bug', 0, 10).setOrigin(0,0);
-      this.ship03.setScale(0.5);
+      // add foods
+      this.cake = new Food(this, game.config.width + borderUISize*6, borderUISize*4 + 35, 'cake', 0, 10).setOrigin(0, 0);
+      this.cake.setScale(0.7);
+      this.cookie = new Food(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2 + 20, 'cookie', 0, 5).setOrigin(0,0);
+      this.cookie.setScale(0.5);
+      this.bug = new Food(this, game.config.width, borderUISize*6 + borderPadding*4 + 18, 'bug', 0, -10).setOrigin(0,0);
+      this.bug.setScale(0.5);
 
-      this.ship04 = new Spaceship(this, game.config.width + borderUISize*6 + 45, borderUISize*4 - 45, 'sandwhich', 0, 40).setOrigin(0,0);
-      this.ship04.setScale(0.5);
-      this.ship04.moveSpeed = 3.3;
+      this.sandwhich = new Food(this, game.config.width + borderUISize*6 + 45, borderUISize*4 - 45, 'sandwhich', 0, 10).setOrigin(0,0);
+      this.sandwhich.setScale(0.5);
+      this.sandwhich.moveSpeed = 3.3;
 
-      this.watermelon = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4 + 65, 'watermelon', 0, 10).setOrigin(0,0);
+      this.watermelon = new Food(this, game.config.width, borderUISize*6 + borderPadding*4 + 65, 'watermelon', 0, 10).setOrigin(0,0);
       this.watermelon.setScale(0.5);
 
       this.tweens.add({
@@ -81,11 +73,11 @@ class Play extends Phaser.Scene {
       keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
       // animation config
-      this.anims.create({
+      /*this.anims.create({
         key: 'explode',
         frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0}),
         frameRate: 30
-      });
+      });*/
 
       // initialize score
       this.p1Score = 0;
@@ -153,14 +145,14 @@ class Play extends Phaser.Scene {
       cursory = input.y;    
       //const yval = [borderUISize*4 + 35, borderUISize*4 + 50, borderUISize*7 + 15];
       //let pick = Math.floor(Math.random() * 3);
-      //this.ship03.y = yval[pick];
+      //this.bug.y = yval[pick];
 
       // increase rocket speeds after 30 secs
       if (Math.trunc(this.clock.elapsed/1000) == 30 && this.reached) {
-        this.ship01.moveSpeed += 1.5;
-        this.ship02.moveSpeed += 1.5;
-        this.ship03.moveSpeed += 1.5;
-        this.ship04.moveSpeed += 1.5;
+        this.cake.moveSpeed += 1.5;
+        this.cookie.moveSpeed += 1.5;
+        this.bug.moveSpeed += 1.5;
+        this.sandwhich.moveSpeed += 1.5;
         this.watermelon.moveSpeed += 1.5;
         this.reached = false;
       }
@@ -179,98 +171,83 @@ class Play extends Phaser.Scene {
       }
       this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());
 
-      //this.starfield.tilePositionX -= 4;
       this.space.tilePositionX -= 4;
 
       if (!this.gameOver) {               
-        this.p1Rocket.update();         // update rocket sprite
-        this.ship01.update();           // update spaceships (x4)
-        this.ship02.update();
-        this.ship03.update();
-        this.ship04.update();
+        this.avatar.update();         // update avatar sprite
+        this.cake.update();           // update foods
+        this.cookie.update();
+        this.bug.update();
+        this.sandwhich.update();
         this.watermelon.update();
       } 
 
       // check collisions
-      if(this.checkCollision(this.p1Rocket, this.ship03)) {
-        //console.log('kaboom ship 03');
-        this.p1Rocket.reset();
-        this.shipExplode(this.ship03);
+      if(this.checkCollision(this.avatar, this.bug)) {
+        this.avatar.reset();
+        this.hitBug(this.bug);
       }
-      if (this.checkCollision(this.p1Rocket, this.ship02)) {
-        //console.log('kaboom ship 02');
-        this.p1Rocket.reset();
-        this.shipExplode(this.ship02);
+      if (this.checkCollision(this.avatar, this.cookie)) {
+        this.avatar.reset();
+        this.collectFood(this.cookie);
       }
-      if (this.checkCollision(this.p1Rocket, this.ship01)) {
-        //console.log('kaboom ship 01');
-        this.p1Rocket.reset();
-        this.shipExplode(this.ship01);
+      if (this.checkCollision(this.avatar, this.cake)) {
+        this.avatar.reset();
+        this.collectFood(this.cake);
       }
-      if (this.checkCollision(this.p1Rocket, this.ship04)) {
-        this.p1Rocket.reset();
-        this.shipExplode(this.ship04);
+      if (this.checkCollision(this.avatar, this.sandwhich)) {
+        this.avatar.reset();
+        this.collectFood(this.sandwhich);
       }
-      if (this.checkCollision(this.p1Rocket, this.watermelon)) {
-        this.p1Rocket.reset();
-        this.shipExplode(this.watermelon);
+      if (this.checkCollision(this.avatar, this.watermelon)) {
+        this.avatar.reset();
+        this.collectFood(this.watermelon);
       }
   
     }
-    checkCollision(rocket, ship) {
+    checkCollision(player, food) {
         // simple AABB checking
-        if (rocket.x < ship.x + ship.width && 
-          rocket.x + rocket.width > ship.x && 
-          rocket.y < ship.y + ship.height &&
-          rocket.height + rocket.y > ship. y) {
+        if (player.x < food.x + food.width && 
+          player.x + player.width > food.x && 
+          player.y < food.y + food.height &&
+          player.height + player.y > food.y) {
             return true;
         } else {
             return false;
         }
     }
-    shipExplode(ship) {
-        // temporarily hide ship
-        ship.alpha = 0;
-        // create explosion sprite at ship's position
-        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
-        boom.anims.play('explode');             // play explode animation
-        boom.on('animationcomplete', () => {    // callback after anim completes
-          ship.reset();                         // reset ship position
-          ship.alpha = 1;                       // make ship visible again
-          boom.destroy();                       // remove explosion sprite
-        });
+    collectFood(food) {
+        // temporarily hide food
+        food.alpha = 0;
+        food.reset();     // reset food position
+        food.alpha = 1;   // make food visible again
         // score add and repaint
-        this.p1Score += ship.points;
+        this.p1Score += food.points;
         console.log('score',this.p1Score);
         this.scoreLeft.text = this.p1Score;  
-        let num = Math.floor(Math.random() * 4);
+        let num = Math.floor(Math.random() * 2);
         //console.log(num);
         if (num == 0) {
           this.sound.play('collect1');
         }
         if (num == 1) {
-          this.sound.play('explosion2');
-        }
-        if (num == 2) {
-          this.sound.play('explosion3');
-        }
-        if (num == 3) {
-          this.sound.play('explosion4');
+          this.sound.play('collect2');
         }
         // add 1 second to timer when a ship is hit
-        this.clock.delay += ship.points * 100;
+        this.clock.delay += food.points * 100;
         this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());   
+    }
+    hitBug(bug) {
+      bug.alpha = 0;
+      bug.reset();
+      bug.alpha = 1;
+      this.p1Score += bug.points;
+      this.sound.play('hit');
     }
     clicked(){
       mousedown = true;
     }
     notClicked(){
       mousedown = false;
-    }
-    getCake (player, cake) {
-      console.log("got cake");
-      this.hasCake = true;
-      cake1.disableBody(true, true);
-      this.cake1.setVisible(false);
     }
 }

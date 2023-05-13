@@ -6,8 +6,6 @@ class Menu extends Phaser.Scene {
       this.load.image('title', './assets/gametitle.png');
       this.load.image('start', './assets/start.png');
       this.load.image('control', './assets/control.png');
-      //this.load.image('control1', './assets/controls1.png');
-      //this.load.image('control2', './assets/controls2.png');
       this.load.image('instruc', './assets/instruc.png');
 
       this.load.image('cake', './assets/cake.png');
@@ -16,15 +14,12 @@ class Menu extends Phaser.Scene {
 
       // load audio
       this.load.audio('sfx_select', './assets/blip_select12.wav');
-      this.load.audio('sfx_explosion', './assets/explosion38.wav');
+      //this.load.audio('sfx_explosion', './assets/explosion38.wav');
       this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
-      //this.load.audio('explosion1', './assets/explosion1.wav');
-      this.load.audio('explosion2', './assets/explosion2.wav');
-      this.load.audio('explosion3', './assets/explosion3.wav');
-      this.load.audio('explosion4', './assets/explosion4.wav');
 
       this.load.audio('collect1', './assets/foodCollect.wav');
-
+      this.load.audio('collect2', './assets/foodCollect2.wav');
+      this.load.audio('hit', './assets/hit.wav');
     }
     create() {
       this.title = this.add.sprite(game.config.width/2, 90, 'title');
@@ -32,8 +27,6 @@ class Menu extends Phaser.Scene {
 
       this.control = this.add.image(game.config.width/2, 235, 'control');
       this.control.setScale(0.65);
-      //this.control2 = this.add.image(game.config.width/2, 275, 'control2');
-      //this.control2.setScale(0.65);
 
       this.start = this.add.image(game.config.width/2, 305, 'start');
       this.start.setScale(0.65);
@@ -69,22 +62,17 @@ class Menu extends Phaser.Scene {
       
       // show menu text
       //this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding - 90, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
-      
-      //menuConfig.backgroundColor = '#33658A';
-      //menuConfig.color = '#DB995A';
-      //this.add.text(game.config.width/2, game.config.height/2 + borderUISize*2 + borderPadding*2 + 50, 'High Score: ' + highscore, menuConfig).setOrigin(0.5);
 
       // define keys
       keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
       keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
       keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-      keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
     }
     update() {
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
           // easy mode
           game.settings = {
-            spaceshipSpeed: 3,
+            foodSpeed: 3,
             gameTimer: 60000    
           }
           this.sound.play('sfx_select');
@@ -93,7 +81,7 @@ class Menu extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
           // hard mode
           game.settings = {
-            spaceshipSpeed: 4,
+            foodSpeed: 4,
             gameTimer: 45000    
           }
           this.sound.play('sfx_select');
