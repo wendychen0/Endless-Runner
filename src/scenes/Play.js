@@ -20,7 +20,7 @@ class Play extends Phaser.Scene {
 
     create() {
       // place tile sprite
-      this.space = this.add.tileSprite(0, 0, 680, 650, 'mat').setOrigin(0, 0);
+      this.picnic = this.add.tileSprite(0, 0, 680, 650, 'mat').setOrigin(0, 0);
 
       let sfx = this.sound.add('music', {volume: 0.4});
       sfx.loop = true;
@@ -36,18 +36,24 @@ class Play extends Phaser.Scene {
       //this.scene.start("playScene");
 
       // add player
-      this.avatar = new Player(this, 20 + borderPadding, game.config.height - borderUISize - borderPadding, 'avatar1').setOrigin(0, 0);
+      this.avatar = new Player(this, borderPadding, game.config.height - borderUISize - borderPadding, 'avatar1').setOrigin(0, 0);
       this.avatar.setScale(0.7);
 
-      const bug1 = this.add.image(100,200,'bug').setScale(0.5);
-      const bug2 = this.add.image(150,300,'bug').setScale(0.5);
+      // add bugs
+      this.bug = new Food(this, game.config.width, borderUISize*6 + borderPadding*4 + 18, 'bug', 0, -10, true).setOrigin(0,0);
+      this.bug.setScale(0.5);
+      this.bug2 = new Food(this, 530, 200, 'bug', 0, -10, true).setOrigin(0,0);
+      this.bug2.setScale(0.5);
+      this.bug3 = new Food(this, 560, 300, 'bug', 0, -10, true).setOrigin(0,0);
+      this.bug3.setScale(0.5);
+
+      //const bug1 = this.add.image(75,200,'bug').setScale(0.5);
+      //const bug2 = this.add.image(560,300,'bug').setScale(0.5);
       // add foods
       this.cake = new Food(this, game.config.width + borderUISize*6, borderUISize*4 + 35, 'cake', 0, 10, false).setOrigin(0, 0);
       this.cake.setScale(0.7);
       this.cookie = new Food(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2 + 20, 'cookie', 0, 5, false).setOrigin(0,0);
       this.cookie.setScale(0.5);
-      this.bug = new Food(this, game.config.width, borderUISize*6 + borderPadding*4 + 18, 'bug', 0, -10, true).setOrigin(0,0);
-      this.bug.setScale(0.5);
 
       this.sandwhich = new Food(this, game.config.width + borderUISize*6 + 45, borderUISize*4 - 45, 'sandwhich', 0, 10, false).setOrigin(0,0);
       this.sandwhich.setScale(0.5);
@@ -57,13 +63,13 @@ class Play extends Phaser.Scene {
       this.watermelon.setScale(0.5);
 
       this.tweens.add({
-        targets: [ bug1, bug2 ],
-        x: 600,
+        targets: [ this.bug2, this.bug3 ],
+        x: '-= 470',
         yoyo: true,
-        duration: 1500,
+        duration: 1600,
         ease: 'Sine.easeInOut',
         repeat: -1,
-        delay: this.tweens.stagger(100)
+        delay: this.tweens.stagger(40)
       });
 
       // define keys
@@ -149,11 +155,23 @@ class Play extends Phaser.Scene {
       cursorx = input.x;
       cursory = input.y;
 
+      let scoreConfig = {
+        fontFamily: 'Courier',
+        fontSize: '28px',
+        backgroundColor: '#eda4c8',
+        color: '#843605',
+        align: 'right',
+        padding: {
+          top: 5,
+          bottom: 5,
+        },
+      }
       // Game over at 0 lives
       if (this.lives == 0) {
         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
         this.gameOver = true;
+        this.tweens.paused = true;
       }
       
       // check key input for restart
@@ -172,11 +190,13 @@ class Play extends Phaser.Scene {
       //this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());
       this.livesLeft.text = this.lives;
 
-      this.space.tilePositionX -= 4;
+      if (this.lives > 0) {
+        this.picnic.tilePositionX -= 4;
+      }
 
       if (!this.gameOver) {               
         this.avatar.update();         // update avatar sprite
-        this.cake.update();           // update foods
+        this.cake.update();           // update foods/bug
         this.cookie.update();
         this.bug.update();
         this.sandwhich.update();
@@ -204,12 +224,16 @@ class Play extends Phaser.Scene {
         this.avatar.reset();
         this.collectFood(this.watermelon);
       }
-  
+      if (this.checkCollision(this.avatar, this.bug2)) {
+        this.avatar.reset();
+        this.collectFood(this.bug2);
+        console.log('hit bug2');
+      }
     }
     checkCollision(player, food) {
         // simple AABB checking
-        console.log('food',food.width);
-        console.log('player', player.width);
+        //console.log('food',food.width);
+        //console.log('player', player.width);
         if (player.x < food.x + food.width - 5 && 
           player.x + player.width > food.x && 
           player.y < food.y + food.height - 10 &&
