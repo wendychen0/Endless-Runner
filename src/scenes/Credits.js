@@ -22,15 +22,15 @@ class Credits extends Phaser.Scene {
         this.returnM = this.add.image(game.config.width/2, 500, 'return');
         this.returnM.setScale(0.52);
 
-        this.artSP = this.add.image(game.config.width/2, 200, 'artSoundProg');
+        this.artSP = this.add.image(game.config.width/2, 220, 'artSoundProg');
         this.artSP.setScale(0.52);
-        this.name = this.add.image(game.config.width/2, 235, 'name');
+        this.name = this.add.image(game.config.width/2, 255, 'name');
         this.name.setScale(0.52);
 
-        let artText = 'Using pixilart.com';
+        let artText = 'Using pixilart.com and avatarsinpixels.com';
         let soundText = 'Sfxr.me and Uppbeat.io in Phaser 3';
-        this.art = this.add.text(game.config.width/2, 285, artText, menuConfig).setOrigin(0.5);;
-        this.sound = this.add.text(game.config.width/2, 318, soundText, menuConfig).setOrigin(0.5);;
+        this.art = this.add.text(game.config.width/2, 305, artText, menuConfig).setOrigin(0.5);;
+        this.sound = this.add.text(game.config.width/2, 338, soundText, menuConfig).setOrigin(0.5);;
 
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);

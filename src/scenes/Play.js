@@ -232,8 +232,6 @@ class Play extends Phaser.Scene {
     }
     checkCollision(player, food) {
         // simple AABB checking
-        //console.log('food',food.width);
-        //console.log('player', player.width);
         if (player.x < food.x + food.width - 5 && 
           player.x + player.width > food.x && 
           player.y < food.y + food.height - 10 &&
@@ -264,10 +262,7 @@ class Play extends Phaser.Scene {
           if (num == 1) {
             this.sound.play('collect2');
           }
-        }
-        /*// add 1 second to timer when a food is collected
-        this.clock.delay += food.points * 100;
-        this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());*/   
+        }  
     }
     increaseSpeed() {
       this.cake.moveSpeed += 1.5;
