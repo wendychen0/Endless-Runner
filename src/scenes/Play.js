@@ -33,7 +33,6 @@ class Play extends Phaser.Scene {
       this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
       this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
       this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
-      //this.scene.start("playScene");
 
       // add player
       this.avatar = new Player(this, borderPadding, game.config.height - borderUISize - borderPadding, 'avatar1').setOrigin(0, 0);
@@ -47,8 +46,6 @@ class Play extends Phaser.Scene {
       this.bug3 = new Food(this, 560, 300, 'bug', 0, -10, true).setOrigin(0,0);
       this.bug3.setScale(0.5);
 
-      //const bug1 = this.add.image(75,200,'bug').setScale(0.5);
-      //const bug2 = this.add.image(560,300,'bug').setScale(0.5);
       // add foods
       this.cake = new Food(this, game.config.width + borderUISize*6, borderUISize*4 + 35, 'cake', 0, 10, false).setOrigin(0, 0);
       this.cake.setScale(0.7);
@@ -187,7 +184,6 @@ class Play extends Phaser.Scene {
         }
         this.scene.start("menuScene");
       }
-      //this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());
       this.livesLeft.text = this.lives;
 
       if (this.lives > 0) {
@@ -227,7 +223,7 @@ class Play extends Phaser.Scene {
       if (this.checkCollision(this.avatar, this.bug2)) {
         this.avatar.reset();
         this.collectFood(this.bug2);
-        console.log('hit bug2');
+        //console.log('hit bug2');
       }
     }
     checkCollision(player, food) {

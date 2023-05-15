@@ -14,10 +14,6 @@ class Menu extends Phaser.Scene {
       this.load.image('sandwhich', './assets/sandwhich.png');
 
       // load audio
-      this.load.audio('sfx_select', './assets/blip_select12.wav');
-      //this.load.audio('sfx_explosion', './assets/explosion38.wav');
-      this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
-
       this.load.audio('collect1', './assets/foodCollect.wav');
       this.load.audio('collect2', './assets/foodCollect2.wav');
       this.load.audio('hit', './assets/hit.wav');
@@ -47,26 +43,6 @@ class Menu extends Phaser.Scene {
       this.watermelon = this.add.image(620, 510, 'watermelon');
       this.watermelon.setScale(0.5);
 
-      // menu text configuration
-      let menuConfig = {
-        fontFamily: 'Sigmar',
-        fontSize: '35px',
-        backgroundColor: '#33658A',//'#F3B141',
-        color: '#E6D48E',//#843605',
-        align: 'right',
-        borderRadius: '25px',
-        padding: {
-          top: 5,
-          bottom: 5,
-          left: 5,
-          right: 5
-        },
-        fixedWidth: 0
-      }
-      
-      // show menu text
-      //this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding - 90, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
-
       // define keys
       keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
       keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -76,8 +52,7 @@ class Menu extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
           // easy mode
           game.settings = {
-            foodSpeed: 3,
-            //gameTimer: 60000    
+            foodSpeed: 3,    
           }
           this.sound.play('sfx_select');
           this.scene.start('playScene');    
