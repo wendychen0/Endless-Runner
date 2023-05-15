@@ -7,6 +7,7 @@ class Menu extends Phaser.Scene {
       this.load.image('start', './assets/start.png');
       this.load.image('control', './assets/control.png');
       this.load.image('instruc', './assets/instruc.png');
+      this.load.image('credits', './assets/credits.png');
 
       this.load.image('cake', './assets/cake.png');
       this.load.image('watermelon', './assets/watermelon.png');
@@ -33,6 +34,9 @@ class Menu extends Phaser.Scene {
 
       this.tut = this.add.image(game.config.width/2, 445, 'instruc');
       this.tut.setScale(0.52);
+
+      this.credit = this.add.image(game.config.width/2, 495, 'credits');
+      this.credit.setScale(0.52);
 
       this.cake = this.add.image(570, 150, 'cake');
       this.cake.setScale(1.1);
@@ -77,6 +81,9 @@ class Menu extends Phaser.Scene {
           }
           this.sound.play('sfx_select');
           this.scene.start('playScene');    
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+          this.scene.start('creditsScene');
         }
     }
   }
