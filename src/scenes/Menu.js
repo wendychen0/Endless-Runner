@@ -3,6 +3,7 @@ class Menu extends Phaser.Scene {
       super("menuScene");
     }
     preload() {
+      this.load.audio('sfx_select', './assets/blip_select12.wav');
       this.load.image('title', './assets/gametitle.png');
       this.load.image('start', './assets/start.png');
       this.load.image('control', './assets/control.png');
